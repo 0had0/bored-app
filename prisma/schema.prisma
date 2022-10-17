@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Series {
+  id                   String    @id
+  name                 String
+  image_path           String?
+  image_thumbnail_path String?
+  episodes             Episode[]
+  images               Images[]
+}
+
+model Images {
+  link     String @id
+  series   Series @relation(fields: [seriesId], references: [id])
+  seriesId String
+}
+
+model Episode {
+  id       String  @id
+  series   Series  @relation(fields: [seriesId], references: [id])
+  seriesId String
+  name     String
+  season   Int
+  episode  Int
+  air_date String?
+}
